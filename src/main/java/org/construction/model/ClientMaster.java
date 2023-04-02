@@ -19,7 +19,7 @@ public class ClientMaster implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "CLIENT_ID_GENERATOR", sequenceName = "site_construction.CLIENT_MASTER_SEQUENCE", allocationSize = 1)
+	@SequenceGenerator(name = "CLIENT_ID_GENERATOR", sequenceName = "site_construction.client_master_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLIENT_ID_GENERATOR")
 	@Column(name="client_id")
 	private long clientId;
