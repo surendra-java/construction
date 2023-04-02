@@ -1,0 +1,90 @@
+-- Table: site_construction.client_master
+
+-- DROP TABLE IF EXISTS site_construction.client_master;
+
+CREATE TABLE IF NOT EXISTS site_construction.client_master
+(
+    client_id bigint NOT NULL,
+    client_address character varying(255) COLLATE pg_catalog."default",
+    client_mob_nbr character varying(255) COLLATE pg_catalog."default",
+    client_name character varying(255) COLLATE pg_catalog."default",
+    client_photo oid,
+    CONSTRAINT client_master_pkey PRIMARY KEY (client_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS site_construction.client_master
+    OWNER to postgres;
+
+
+-- Table: site_construction.client_progress_master
+
+-- DROP TABLE IF EXISTS site_construction.client_progress_master;
+
+CREATE TABLE IF NOT EXISTS site_construction.client_progress_master
+(
+    client_progress_master_id bigint NOT NULL,
+    client_progress_name character varying COLLATE pg_catalog."default" NOT NULL,
+    client_progress_desc character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT client_progress_master_pkey PRIMARY KEY (client_progress_master_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS site_construction.client_progress_master
+    OWNER to postgres;
+
+
+-- Table: site_construction.client_progress_status
+
+-- DROP TABLE IF EXISTS site_construction.client_progress_status;
+
+CREATE TABLE IF NOT EXISTS site_construction.client_progress_status
+(
+    client_progress_status_id bigint NOT NULL,
+    client_progress_status_name character varying COLLATE pg_catalog."default" NOT NULL,
+    client_progress_status_desc character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT client_progress_status_pkey PRIMARY KEY (client_progress_status_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS site_construction.client_progress_status
+    OWNER to postgres;
+
+
+
+-- Table: site_construction.client_progress
+
+-- DROP TABLE IF EXISTS site_construction.client_progress;
+
+CREATE TABLE IF NOT EXISTS site_construction.client_progress
+(
+    client_progress_id bigint NOT NULL,
+    client_id bigint NOT NULL,
+    client_progress_master_id bigint NOT NULL,
+    client_progress_status_id bigint NOT NULL,
+    reason character varying COLLATE pg_catalog."default",
+    CONSTRAINT client_progress_id_pk PRIMARY KEY (client_progress_id),
+    CONSTRAINT client_id_fk FOREIGN KEY (client_id)
+        REFERENCES site_construction.client_master (client_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT client_progress_master_id_fk FOREIGN KEY (client_progress_master_id)
+        REFERENCES site_construction.client_progress_master (client_progress_master_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT client_progress_status_id_fk FOREIGN KEY (client_progress_status_id)
+        REFERENCES site_construction.client_progress_status (client_progress_status_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS site_construction.client_progress
+    OWNER to postgres;
