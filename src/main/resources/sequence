@@ -1,31 +1,20 @@
--- SEQUENCE: site_construction.client_master_sequence
+client_progress_master
 
--- DROP SEQUENCE IF EXISTS site_construction.client_master_sequence;
-
-CREATE SEQUENCE IF NOT EXISTS site_construction.client_master_sequence
-    INCREMENT 1
-    START 2
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-ALTER SEQUENCE site_construction.client_master_sequence
-    OWNER TO postgres;
+"Initial Consultation"
+"Site Inspection"
+"Design and Planning"
+"Finalize Cost"
+"Agreement Signed"
+"Applied Home Loan"
 
 
--------
+client_progress_status
+
+"Not Started"
+"Started"
+"Inprogress"
+"Pending"
+"Done"
+"Close"
 
 
--- SEQUENCE: site_construction.client_progress_sequence
-
--- DROP SEQUENCE IF EXISTS site_construction.client_progress_sequence;
-
-CREATE SEQUENCE IF NOT EXISTS site_construction.client_progress_sequence
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-ALTER SEQUENCE site_construction.client_progress_sequence
-    OWNER TO postgres;
