@@ -1,5 +1,6 @@
 package org.construction.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.construction.dto.ClientMasterDto;
 import org.construction.model.ClientMaster;
 import org.construction.model.ClientProgress;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ClientMasterServiceImpl implements IClientMasterService {
 
@@ -50,6 +52,7 @@ public class ClientMasterServiceImpl implements IClientMasterService {
                              String clientAddress,
                              String clientMobileNumber,
                              MultipartFile clientPhoto) throws IOException {
+        log.debug("this is ClientMasterServiceImpl");
         ClientMaster clientMaster = new ClientMaster();
         clientMaster.setClientName(clientName);
         clientMaster.setClientAddress(clientAddress);
