@@ -11,8 +11,8 @@ node {
     }
     stage('docker'){
         withCredentials([file(credentialsId: 'construction-project', variable: 'GC_KEY')]) {
-                    sh "export PATH=$PATH:/path/to/google-cloud-sdk/bin"
-                    sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+
+                    sh "gcloud auth activate-service-account --key-file=<(echo '$GC_KEY')"
 
                     projectId = "construction-project-382718"
                     registry = "us-central1-construction-project-382718"
