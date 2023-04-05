@@ -10,16 +10,16 @@ node {
         }
     }
     stage('docker'){
-        withCredentials([string(credentialsId: 'construction-project', variable: 'GCP_CREDENTIALS_JSON')]) {
-            sh "gcloud auth activate-service-account --key-file=<(echo '$GCP_CREDENTIALS_JSON')"
+        withCredentials([file(credentialsId: 'construction-project', variable: 'construction-project')]) {
+                    sh "gcloud auth activate-service-account --key-file=${construction-project}"
 
-            def projectId = "construction-project-382718"
-            def registry = "us-central1-construction-project-382718"
+                    def projectId = "construction-project-382718"
+                    def registry = "us-central1-construction-project-382718"
 
-            def image = "gcr.io/${registry}/construction-service:${env.BUILD_NUMBER}"
+                    def image = "gcr.io/${registry}/construction-service:${env.BUILD_NUMBER}"
 
-            sh "docker build -t ${image} ."
-            sh "docker push ${image}"
-        }
+                    sh "docker build -t ${image} ."
+                    sh "docker push ${image}"
+                }
     }
 }
