@@ -10,7 +10,7 @@ node {
         }
     }
     stage('docker'){
-        withCredentials([string(credentialsId: 'GCP_CREDENTIALS_JSON', variable: 'GCP_CREDENTIALS_JSON')]) {
+        withCredentials([string(credentialsId: 'construction-project', variable: 'GCP_CREDENTIALS_JSON')]) {
             sh "gcloud auth activate-service-account --key-file=<(echo '$GCP_CREDENTIALS_JSON')"
 
             def projectId = "construction-project-382718"
