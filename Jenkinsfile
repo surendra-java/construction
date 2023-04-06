@@ -10,17 +10,19 @@ node {
         }
     }
     stage('docker'){
-        withCredentials([file(credentialsId: 'construction-project', variable: 'GC_KEY')]) {
-            sh "export PATH=$PATH:/path/to/google-cloud-sdk/bin"
-            sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+        withEnv(["PATH=${tool name: 'google-cloud-sdk', type: 'sdk'}/bin:${env.PATH}",
+                 "GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/credentials.json"]) {
+            withCredentials([file(credentialsId: 'construction-project', variable: 'GC_KEY')]) {
+                sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
 
-            def projectId = "construction-project-382718"
-            def registry = "us-central1-construction-project-382718"
+                def projectId = "construction-project-382718"
+                def registry = "us-central1-construction-project-382718"
 
-            def image = "gcr.io/${registry}/construction-service:${env.BUILD_NUMBER}"
+                def image = "gcr.io/${registry}/construction-service:${env.BUILD_NUMBER}"
 
-            sh "docker build -t ${image} ."
-            sh "docker push ${image}"
+                sh "docker build -t ${image} ."
+                sh "docker push ${image}"
+            }
         }
     }
 
