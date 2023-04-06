@@ -9,7 +9,18 @@ node {
             sh "${mvnHome}/bin/mvn package"
         }
     }
-    stage('docker'){
+   stage('test'){
+
+
+                withCredentials([file(credentialsId: 'gcloud-cred', variable: 'GCLOUD_CRED')]) {
+                    sh '''
+                    gcloud version
+                    gcloud auth activate-service-account --key-file="$GCLOUD_CRED"
+                    gcloud compute zones list
+                    '''
+                }
+        }
+   /*  stage('docker'){
 
         def GCLOUD_PATH = tool name: 'gcloud', type: 'google-cloud-sdk'
          sh '$GCLOUD_PATH/bin --version'
@@ -24,7 +35,7 @@ node {
                 sh "docker build -t ${image} ."
                 sh "docker push ${image}"
             }
-    }
+    } */
 
 
 }
