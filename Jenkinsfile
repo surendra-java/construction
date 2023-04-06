@@ -10,7 +10,8 @@ node {
         }
     }
     stage('docker'){
-        withEnv(["PATH=${tool name: 'gcloud', type: 'google-cloud-sdk'}/bin:${env.PATH}"]) {
+        withEnv(['GCLOUD_PATH=/var/jenkins_home/google-cloud-sdk/bin']) {
+         sh '$GCLOUD_PATH/gcloud --version'
             withCredentials([file(credentialsId: 'construction-project', variable: 'GC_KEY')]) {
                 sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
 
