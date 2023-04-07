@@ -10,12 +10,12 @@ node {
         }
     }
     stage('docker'){
-        withCredentials([file(credentialsId: 'construction-project', variable: 'GC_KEY')]) {
+        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             sh "export PATH=$PATH:/path/to/google-cloud-sdk/bin"
             sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
 
             def projectId = "construction-project-382718"
-            def registry = "us-central1-construction-project-382718"
+            def registry = "us-east1-d-construction-project-382718"
 
             def image = "gcr.io/${registry}/construction-service:${env.BUILD_NUMBER}"
 
