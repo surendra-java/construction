@@ -14,13 +14,14 @@ pipeline {
         stage('Push') {
             steps {
                 withCredentials([string(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-                    sh '''
+                    /* sh '''
                         echo $GC_KEY > key.json
                         gcloud auth activate-service-account --key-file=key.json
                         gcloud config set project ${PROJECT_ID}
                         docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
                         docker push gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
-                    '''
+                    ''' */
+                    sh "docker ping gcr.io"
                 }
             }
         }
