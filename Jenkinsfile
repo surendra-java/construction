@@ -17,7 +17,7 @@ node {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
                 sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
                 projectId = "construction-project-382718"
-                registry = "us-central1"
+                registry = "construction-docker-repo"
                 image = "gcr.io/${projectId}/${registry}/construction-service:${env.BUILD_NUMBER}"
                 sh "docker build -t ${image} ."
                 sh "docker push ${image}"
