@@ -10,7 +10,7 @@ node {
     }
 
     stage('Build Image') {
-        sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+        sh "docker build -t ${imageName}:${tag} ."
     }
 
     stage('Push') {
@@ -18,9 +18,9 @@ node {
             sh """
                 echo \$GC_KEY > key.json
                 gcloud auth activate-service-account --key-file=key.json
-                gcloud config set project ${PROJECT_ID}
-                docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
-                docker push gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
+                gcloud config set project ${projectID}
+                docker tag ${imageName}:${tag} gcr.io/${projectID}/${imageName}:${tag}
+                docker push gcr.io/${projectID}/${imageName}:${tag}
             """
         }
     }
