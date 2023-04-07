@@ -1,5 +1,12 @@
 node {
     def app
+    environment {
+        PROJECT_ID = 'construction-project-382718'
+        REGISTRY = 'gcr.io'
+        IMAGE = 'construction'
+        TAG = 'latest'
+        //SERVICE_ACCOUNT_KEY = credentials('gcp-service-account-key')
+      }
     stage('checkout'){
         checkout scm
     }
@@ -10,17 +17,10 @@ node {
         }
     }
     stage('docker'){
-        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-            sh "export PATH=$PATH:/path/to/google-cloud-sdk/bin"
-            sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-
-            def projectId = "construction-project-382718"
-            def registry = "us-east1-d-construction-project-382718"
-
-            def image = "gcr.io/${registry}/construction-service:${env.BUILD_NUMBER}"
-
-            sh "docker build -t ${image} ."
-            sh "docker push ${image}"
+            withCredentials([string(credentialsId: 'gcr-cred', variable: 'SERVICE_ACCOUNT_KEY')]) {
+                      sh "gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_KEY}"
+                      sh "gcloud auth configure-docker --quiet"
+                      sh "docker push ${REGISTRY}/${PROJECT_ID}/${IMAGE}:${TAG}"
         }
     }
 }
