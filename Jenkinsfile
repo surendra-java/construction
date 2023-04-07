@@ -1,9 +1,7 @@
 node {
-    environment {
-        PROJECT_ID = "construction-project-382718"
-        IMAGE_NAME = "construction-service"
-        TAG = "latest"
-    }
+    def projectID = "construction-project-382718"
+    def imageName = "construction-service"
+    def tag = "latest"
     stage('Build') {
         def mvnHom = tool name: 'maven-3', type: 'maven'
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
