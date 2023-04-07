@@ -13,7 +13,7 @@ pipeline {
         } */
         stage('Push') {
             steps {
-                withCredentials([string(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+                withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
                     /* sh '''
                         echo $GC_KEY > key.json
                         gcloud auth activate-service-account --key-file=key.json
