@@ -8,8 +8,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
-                    def mvnHom = tool name: 'maven-3', type: 'maven'
+                withEnv(["JAVA_HOME=${tool(name: 'java-11', type: 'jdk')}"]) {
+                    def mvnHom = tool(name: 'maven-3', type: 'maven')
                     sh "${mvnHom}/bin/mvn package"
                 }
             }
