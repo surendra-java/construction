@@ -11,7 +11,7 @@ node {
         }
     }
     stage('docker'){
-            withCredentials([string(credentialsId: 'gcr-cred', variable: 'SERVICE_ACCOUNT_KEY')]) {
+            withCredentials([file(credentialsId: 'gcr-cred', variable: 'SERVICE_ACCOUNT_KEY')]) {
                       sh "gcloud auth activate-service-account --key-file=${SERVICE_ACCOUNT_KEY}"
                       sh "gcloud auth configure-docker --quiet"
                       sh "docker push gcr.io/construction-project-382718/construction:latest"
