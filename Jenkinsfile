@@ -7,6 +7,11 @@ pipeline {
     }
     stages {
         stage('Build') {
+                steps {
+                    sh 'mvn package'
+                }
+        }
+        stage('Build Image') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:${TAG} .'
             }
