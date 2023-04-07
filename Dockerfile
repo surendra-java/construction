@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot
 
-ADD target/construction-service-1.0-SNAPSHOT.jar app.jar
-EXPOSE 8083
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
 
 ENTRYPOINT ["java","-jar","/app.jar"]
