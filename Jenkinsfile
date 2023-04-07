@@ -6,11 +6,11 @@ pipeline {
         TAG = "latest"
     }
     stages {
-        stage('Build') {
+       /*  stage('Build') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:${TAG} .'
             }
-        }
+        } */
         stage('Push') {
             steps {
                 withCredentials([string(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
