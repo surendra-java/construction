@@ -19,7 +19,8 @@ node {
                 projectId = "construction-project-382718"
                 registry = "construction-docker-repo"
                 imageName = "construction-service"
-                tag = "${env.BUILD_NUMBER}"
+                //tag = "${env.BUILD_NUMBER}"
+                tag = "latest"
                 sh "gcloud docker -- push gcr.io/${projectId}/${registry}/${imageName}:${tag}"
             }
     }
