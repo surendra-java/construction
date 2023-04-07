@@ -7,10 +7,11 @@ pipeline {
     }
     stages {
         stage('Build') {
-                steps {
-                    sh 'mvn package'
-                }
-        }
+                       withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
+                           	   def mvnHom = tool name: 'maven-3', type: 'maven'
+                                  sh "${mvnHom}/bin/mvn package"
+                                  }
+                               }
         stage('Build Image') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:${TAG} .'
