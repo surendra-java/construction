@@ -14,14 +14,15 @@ node {
     }
 
     stage('Push') {
-         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-                sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-                projectId = "construction-project-382718"
-                registry = "construction-docker-repo"
-                imageName = "construction-service"
-                //tag = "${env.BUILD_NUMBER}"
-                tag = "latest"
-                sh "gcloud docker -- push gcr.io/${projectId}/${registry}/${imageName}:${tag}"
-            }
+        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+            sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+            projectId = "construction-project-382718"
+            registry = "construction-docker-repo"
+            imageName = "construction-service"
+            tag = "${env.BUILD_NUMBER}"
+            sh "docker build -t gcr.io/${projectId}/${registry}/${imageName}:${tag} ."
+            sh "gcloud docker -- push gcr.io/${projectId}/${registry}/${imageName}:${tag}"
+        }
     }
+
 }
