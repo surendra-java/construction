@@ -1,17 +1,28 @@
 pipeline {
-  agent  any
-    stages {
-      stage('Test') {
-        steps {  
-          sh " echo Test is not avalaible"
-        }
-      }
-    stage('Build and push image with Container Builder') {
-      steps {
-        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]){
-             sh "gcloud auth activate-service-account --key-file='$GC_KEY'"
-         }
-        }
-      }
+    agent any
+    environment {
+        PROJECT_ID = "construction-project-382718"
+        IMAGE_NAME = "construction-service"
+        TAG = "latest"
     }
- }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME}:${TAG} .'
+            }
+        }
+        stage('Push') {
+            steps {
+                withCredentials([string(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+                    sh '''
+                        echo $GC_KEY > key.json
+                        gcloud auth activate-service-account --key-file=key.json
+                        gcloud config set project ${PROJECT_ID}
+                        docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
+                        docker push gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
+                    '''
+                }
+            }
+        }
+    }
+}
