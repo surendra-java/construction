@@ -12,16 +12,14 @@ node {
     }
     stage('Publish to Artifact Registry') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-            sh """
-                gcloud auth activate-service-account --key-file="${GC_KEY}"
-                mvn package \
-                  -Dmaven.wagon.http.ssl.insecure=true \
-                  -Dmaven.wagon.http.ssl.allowall=true \
-                  -Dmaven.deploy.skip=true \
-                  -DaltDeploymentRepository="gcp::default::https://${region}-maven.pkg.dev/${projectID}/${repositoryName}/"
-            """
+            withEnv(['CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=${GC_KEY}']) {
+                def mvnHome = tool name: 'maven-3', type: 'maven'
+                def cmd = "${mvnHome}/bin/mvn deploy -s ${WORKSPACE}/settings.xml -Dmaven.test.skip=true"
+                sh cmd
+            }
         }
     }
+
     stage('Build and Push Image') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
