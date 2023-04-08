@@ -12,7 +12,7 @@
             <repositories>
                 <repository>
                     <id>gcp</id>
-                    <url>https://Iowa-maven.pkg.dev/construction-project-382718/construction-service/</url>
+                    <url>https://us-central1-maven.pkg.dev/construction-project-382718/construction-service/</url>
                     <releases>
                         <enabled>true</enabled>
                     </releases>

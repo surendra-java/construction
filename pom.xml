@@ -112,7 +112,7 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.0.0-M1</version>
                 <configuration>
-                    <altDeploymentRepository>gcp::default::https://Iowa-maven.pkg.dev/construction-project-382718/construction-service/</altDeploymentRepository>
+                    <altDeploymentRepository>gcp::default::https://us-central1-maven.pkg.dev/construction-project-382718/construction-service/</altDeploymentRepository>
                 </configuration>
                 <!--<configuration>
                     <altDeploymentRepository>local-nexus::default::http://localhost:8081/repository/maven-snapshots/</altDeploymentRepository>
