@@ -9,11 +9,11 @@ node {
         }
     }
 
-    stage('Build Image') {
+    /* stage('Build Image') {
         sh "docker build -t ${imageName}:${tag} ."
-    }
+    } */
 
-    stage('Push') {
+    stage('Build and Push Image') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
             projectId = "construction-project-382718"
