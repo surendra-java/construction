@@ -2,15 +2,15 @@ node {
     def projectID = "construction-project-382718"
     def imageName = "construction-service"
     def tag = "latest"
-    def region = "Iowa"
-    def repositoryName = "construction-service"
+    //def region = "us-central1"
+    //def repositoryName = "construction-service"
     stage('Build') {
         def mvnHom = tool name: 'maven-3', type: 'maven'
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
         }
     }
-    stage('Publish to Artifact Registry') {
+   /*  stage('Publish to Artifact Registry') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             withEnv(['CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=${GC_KEY}']) {
                 def mvnHome = tool name: 'maven-3', type: 'maven'
@@ -18,7 +18,7 @@ node {
                 sh cmd
             }
         }
-    }
+    } */
 
     stage('Build and Push Image') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
