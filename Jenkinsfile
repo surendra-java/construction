@@ -9,10 +9,6 @@ node {
         }
     }
 
-    /* stage('Build Image') {
-        sh "docker build -t ${imageName}:${tag} ."
-    } */
-
     stage('Build and Push Image') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
@@ -20,8 +16,8 @@ node {
             registry = "construction-docker-repo"
             imageName = "construction-service"
             tag = "${env.BUILD_NUMBER}"
-            sh "docker build -t gcr.io/${projectId}/${registry}/${imageName}:${tag} ."
-            sh "gcloud docker -- push gcr.io/${projectId}/${registry}/${imageName}:${tag}"
+            sh "docker build -t gcr.io/${projectId}/${imageName}:${tag} ."
+            sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
         }
     }
 
