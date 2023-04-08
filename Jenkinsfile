@@ -2,13 +2,26 @@ node {
     def projectID = "construction-project-382718"
     def imageName = "construction-service"
     def tag = "latest"
+    def region = "Iowa"
+    def repositoryName = "construction-service"
     stage('Build') {
         def mvnHom = tool name: 'maven-3', type: 'maven'
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
         }
     }
-
+    stage('Publish to Artifact Registry') {
+        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+            sh """
+                gcloud auth activate-service-account --key-file="${GC_KEY}"
+                mvn package \
+                  -Dmaven.wagon.http.ssl.insecure=true \
+                  -Dmaven.wagon.http.ssl.allowall=true \
+                  -Dmaven.deploy.skip=true \
+                  -DaltDeploymentRepository="gcp::default::https://${region}-maven.pkg.dev/${projectID}/${repositoryName}/"
+            """
+        }
+    }
     stage('Build and Push Image') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
