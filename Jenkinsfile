@@ -13,12 +13,12 @@ node {
     }
      stage('Unit Test') {
                 withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
-                    sh '${mvnHom}/bin/mvn test'
+                    sh "${mvnHom}/bin/mvn test"
                 }
             }
             stage('Integration Test') {
                 withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
-                    sh '${mvnHom}/bin/mvn verify'
+                    sh "${mvnHom}/bin/mvn verify"
                 }
      }
     stage('static code analysis') {
