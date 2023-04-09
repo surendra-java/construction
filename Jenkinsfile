@@ -11,6 +11,16 @@ node {
             sh "${mvnHom}/bin/mvn package"
         }
     }
+     stage('Unit Test') {
+                withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
+                    sh '${mvnHom}/bin/mvn test'
+                }
+            }
+            stage('Integration Test') {
+                withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
+                    sh '${mvnHom}/bin/mvn verify'
+                }
+     }
     stage('static code analysis') {
             withSonarQubeEnv(credentialsId:'sonar-auth') {
                 sh "${mvnHom}/bin/mvn clean package sonar:sonar"
@@ -37,5 +47,10 @@ node {
             sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
         }
     }
-
+    post {
+        always {
+            jacoco(execPattern: '**/target/jacoco.exec')
+            junit 'target/surefire-reports/**/*.xml'
+        }
+    }
 }
