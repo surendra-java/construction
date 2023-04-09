@@ -12,7 +12,6 @@ node {
         }
     }
     stage('static code analysis') {
-
             withSonarQubeEnv(credentialsId:'sonar-auth') {
                 sh "${mvnHom}/bin/mvn clean package sonar:sonar"
             }
