@@ -5,27 +5,26 @@ node {
     def mvnHom = tool name: 'maven-3', type: 'maven'
     //def region = "us-central1"
     //def repositoryName = "construction-service"
-    stage('Build') {
-
+    stage('BUILD') {
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
         }
     }
-     stage('Unit Test') {
-                withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
-                    sh "${mvnHom}/bin/mvn test"
-                }
-            }
-            stage('Integration Test') {
-                withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
-                    sh "${mvnHom}/bin/mvn verify"
-                }
-     }
-    stage('static code analysis') {
-            withSonarQubeEnv(credentialsId:'sonar-auth') {
-                sh "${mvnHom}/bin/mvn clean package sonar:sonar"
-            }
+     stage('UNIT TEST') {
+        withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
+            sh "${mvnHom}/bin/mvn test"
         }
+     }
+    stage('INTEGRATION TEST') {
+        withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
+            sh "${mvnHom}/bin/mvn verify"
+        }
+     }
+    stage('CODE QUALITY') {
+        withSonarQubeEnv(credentialsId:'sonar-auth') {
+            sh "${mvnHom}/bin/mvn clean package sonar:sonar"
+        }
+    }
    /*  stage('Publish to Artifact Registry') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             withEnv(['CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=${GC_KEY}']) {
@@ -36,7 +35,7 @@ node {
         }
     } */
 
-    stage('Build and Push Image') {
+    stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
             projectId = "construction-project-382718"
