@@ -21,6 +21,9 @@
         <maven.compiler.target>11</maven.compiler.target>
         <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/target/site/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
