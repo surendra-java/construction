@@ -5,6 +5,9 @@ node {
     def mvnHom = tool name: 'maven-3', type: 'maven'
     //def region = "us-central1"
     //def repositoryName = "construction-service"
+    stage('CHECKOUT') {
+            checkout scm
+    }
     stage('BUILD') {
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
