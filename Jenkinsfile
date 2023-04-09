@@ -2,14 +2,21 @@ node {
     def projectID = "construction-project-382718"
     def imageName = "construction-service"
     def tag = "latest"
+    def mvnHom = tool name: 'maven-3', type: 'maven'
     //def region = "us-central1"
     //def repositoryName = "construction-service"
     stage('Build') {
-        def mvnHom = tool name: 'maven-3', type: 'maven'
+
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
         }
     }
+    stage('static code analysis') {
+
+            withSonarQubeEnv(credentialsId:'sonar-auth') {
+                sh "${mvnHom}/bin/mvn clean package sonar:sonar"
+            }
+        }
    /*  stage('Publish to Artifact Registry') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
             withEnv(['CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=${GC_KEY}']) {
