@@ -50,13 +50,10 @@ node {
         }
     }
     stage('Deploy to Kubernetes'){
-        	try {
-               		kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig")
-               }catch (e) {
-        			println e
-    		   }
-
-      }
+        	withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+        	    sh "kubectl apply -f deployment-dev.yaml"
+          }
+    }
     post {
         always {
             jacoco(execPattern: '**/target/jacoco.exec')
