@@ -43,16 +43,16 @@ node {
       }
     } */
     stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
-        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-            sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-            projectId = "construction-project-382718"
-            registry = "construction-docker-repo"
-            imageName = "construction-service"
-            tag = "${env.BUILD_NUMBER}"
-            app = docker.build("gcr.io/${projectId}/${imageName}:${tag}")
-            app.push("${env.BUILD_NUMBER}")
+            withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+                sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+                projectId = "construction-project-382718"
+                registry = "construction-docker-repo"
+                imageName = "construction-service"
+                app = docker.build("gcr.io/${projectId}/${imageName}")
+                app.push("${env.BUILD_NUMBER}")
+    			app.push("latest")
+            }
         }
-    }
     /* stage('Deploy to Kubernetes'){
         kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig1")
     } */
