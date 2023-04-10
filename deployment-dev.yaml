@@ -1,16 +1,3 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: deployment-viewer
-  namespace: default
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: view
-subjects:
-  - kind: User
-    name: gke_construction-project-382718_us-central1_construction-cluster
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -65,7 +52,7 @@ spec:
               memory: 128Mi
 ---
 apiVersion: v1
-kind: Service
+kind: construction-service
 metadata:
   name: construction-service
 spec:
