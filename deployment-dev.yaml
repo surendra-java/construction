@@ -52,14 +52,18 @@ spec:
               memory: 128Mi
 ---
 apiVersion: v1
-kind: construction-service
+kind: Service
 metadata:
   name: construction-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: construction-service
   ports:
     - name: grpc
       port: 5000
       targetPort: 8080
+    - name: http
+      port: 8080
+      targetPort: 8080
+  externalTrafficPolicy: Cluster
