@@ -8,7 +8,7 @@ node {
     stage('CHECKOUT') {
             checkout scm
     }
-    stage('BUILD') {
+   /*  stage('BUILD') {
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
         }
@@ -28,15 +28,7 @@ node {
             sh "${mvnHom}/bin/mvn clean package sonar:sonar"
         }
     }
-   /*  stage('Publish to Artifact Registry') {
-        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-            withEnv(['CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=${GC_KEY}']) {
-                def mvnHome = tool name: 'maven-3', type: 'maven'
-                def cmd = "${mvnHome}/bin/mvn deploy -s ${WORKSPACE}/settings.xml -Dmaven.test.skip=true"
-                sh cmd
-            }
-        }
-    } */
+    */
 
     stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
