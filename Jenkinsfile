@@ -49,6 +49,14 @@ node {
             sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
         }
     }
+    stage('Deploy to Kubernetes'){
+        	try {
+               		kubernetesDeploy(configs: "deployment.yaml", kubeconfigId: "kubeconfig")
+               }catch (e) {
+        			println e
+    		   }
+
+      }
     post {
         always {
             jacoco(execPattern: '**/target/jacoco.exec')
