@@ -8,6 +8,24 @@ rules:
     resources: ["services"]
     verbs: ["get", "watch", "list"]
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: construction-service
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: service-reader-pod
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: service-reader
+subjects:
+  - kind: ServiceAccount
+    name: construction-service
+    namespace: default
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
