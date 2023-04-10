@@ -8,7 +8,7 @@ node {
     stage('CHECKOUT') {
             checkout scm
     }
-   /*  stage('BUILD') {
+     stage('BUILD') {
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
             sh "${mvnHom}/bin/mvn package"
         }
@@ -28,7 +28,7 @@ node {
             sh "${mvnHom}/bin/mvn clean package sonar:sonar"
         }
     }
-    */
+
 
     stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
         withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
@@ -41,23 +41,9 @@ node {
             sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
         }
     }
-    stage('Deploy to Kubernetes'){
-        	try {
-               		kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig1")
-               }catch (e) {
-        			println e
-    		   }
-
-        }
+    /* stage('Deploy to Kubernetes'){
+        kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig1")
+    } */
 
 
-
-
-
-    post {
-        always {
-            jacoco(execPattern: '**/target/jacoco.exec')
-            junit 'target/surefire-reports/**/*.xml'
-        }
-    }
 }
