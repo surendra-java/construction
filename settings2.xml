@@ -1,0 +1,26 @@
+<settings>
+    <servers>
+        <server>
+            <id>gcp</id>
+            <username>_json_key</username>
+            <password>{GC_KEY}</password>
+        </server>
+    </servers>
+    <profiles>
+        <profile>
+            <id>gcp</id>
+            <repositories>
+                <repository>
+                    <id>gcp</id>
+                    <url>https://us-central1-maven.pkg.dev/construction-project-382718/construction-service/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+</settings>

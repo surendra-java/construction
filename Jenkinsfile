@@ -10,7 +10,7 @@ node {
     }
      stage('BUILD') {
         withEnv(["JAVA_HOME=${tool name: 'java-11', type: 'jdk'}"]) {
-            sh "${mvnHom}/bin/mvn package"
+            sh "${mvnHom}/bin/mvn clean validate compile package"
         }
     }
      stage('UNIT TEST') {
