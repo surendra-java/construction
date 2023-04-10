@@ -65,10 +65,10 @@ node {
                   installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
                     https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
                   provideClusterInfo: true''', credentialsId: 'kubeconfig', serverUrl: 'https://35.232.54.41') {
-                // some block
+                    sh "kubectl get pods"
         }
 
-
+ }
 
 
 
