@@ -3,6 +3,7 @@ node {
     def imageName = "construction-service"
     def tag = "latest"
     def mvnHom = tool name: 'maven-3', type: 'maven'
+    def app
     //def region = "us-central1"
     //def repositoryName = "construction-service"
     stage('CHECKOUT') {
@@ -37,8 +38,8 @@ node {
             registry = "construction-docker-repo"
             imageName = "construction-service"
             tag = "${env.BUILD_NUMBER}"
-            sh "docker build -t gcr.io/${projectId}/${imageName}:${tag} ."
-            sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
+            app = docker.build("gcr.io/${projectId}/${imageName}:${tag}")
+            app.push("gcr.io/${projectId}/${imageName}:${tag}")
         }
     }
     /* stage('Deploy to Kubernetes'){
