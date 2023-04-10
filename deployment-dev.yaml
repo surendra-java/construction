@@ -1,37 +1,8 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  namespace: default
-  name: service-reader
-rules:
-  - apiGroups: [""]
-    resources: ["services"]
-    verbs: ["get", "watch", "list"]
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: construction-service
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: service-reader-pod
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: service-reader
-subjects:
-  - kind: ServiceAccount
-    name: construction-service
-    namespace: default
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: construction-service
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: construction-service
@@ -40,21 +11,55 @@ spec:
       labels:
         app: construction-service
     spec:
-      serviceAccountName: construction-service
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 5
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       containers:
-        - name: construction-service
+        - name: server
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
           image: gcr.io/construction-project-382718/construction-service:44
           ports:
             - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: DISABLE_PROFILER
+              value: "1"
+          readinessProbe:
+            periodSeconds: 5
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+          livenessProbe:
+            periodSeconds: 5
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: construction-service
 spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 8080
+  type: ClusterIP
   selector:
     app: construction-service
+  ports:
+    - name: grpc
+      port: 5000
+      targetPort: 8080
