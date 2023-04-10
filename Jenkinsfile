@@ -50,15 +50,22 @@ node {
         }
     }
     stage('Deploy to Kubernetes'){
-        	withCredentials([file(credentialsId: 'construction-project', variable: 'KUBECONFIG')]) {
-        	   sh """
-                           gcloud auth activate-service-account --key-file=${KUBECONFIG}
-                           gcloud container clusters get-credentials construction-cluster --region us-central1 --project construction-project-382718
-                           kubectl get pods
-                           kubectl apply -f deployment-dev.yaml
-                  """
-          }
+        withCredentials([googleServiceAccount(credentialsId: 'construction-project', variable:'GOOGLE_APPLICATION_CREDENTIALS')]) {
+            sh """
+                gcloud auth activate-service-account ${GOOGLE_APPLICATION_CREDENTIALS} --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                gcloud container clusters get-credentials construction-cluster --region us-central1 --project construction-project-382718
+                kubectl get pods
+                kubectl apply -f deployment-dev.yaml
+            """
+        }
     }
+
+
+
+
+
+
+
     post {
         always {
             jacoco(execPattern: '**/target/jacoco.exec')
