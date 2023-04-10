@@ -51,8 +51,12 @@ node {
     }
     stage('Deploy to Kubernetes'){
         	withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-        	    sh 'kubectl get pods'
-        	    sh 'kubectl apply -f deployment-dev.yaml'
+        	   sh """
+                           gcloud auth activate-service-account --key-file=${KUBECONFIG}
+                           gcloud container clusters get-credentials construction-cluster --region us-central1 --project construction-project-382718
+                           kubectl get pods
+                           kubectl apply -f deployment-dev.yaml
+                  """
           }
     }
     post {
