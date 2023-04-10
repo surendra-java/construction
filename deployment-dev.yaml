@@ -22,6 +22,7 @@ spec:
       labels:
         app: construction-service
     spec:
+      serviceAccountName: construction-service
       containers:
         - name: construction-service
           image: gcr.io/construction-project-382718/construction-service:44
