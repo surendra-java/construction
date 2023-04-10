@@ -4,11 +4,10 @@ metadata:
   namespace: default
   name: service-reader
 rules:
-  - apiGroups: [""] # "" indicates the core API group
+  - apiGroups: [""]
     resources: ["services"]
     verbs: ["get", "watch", "list"]
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
