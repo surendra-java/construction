@@ -3,7 +3,6 @@ node {
     def imageName = "construction-service"
     def tag = "latest"
     def mvnHom = tool name: 'maven-3', type: 'maven'
-    def app
     //def region = "us-central1"
     //def repositoryName = "construction-service"
     stage('CHECKOUT') {
@@ -31,29 +30,18 @@ node {
     }
 
 
-    /* stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
-      withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-        projectId = "construction-project-382718"
-        registry = "construction-docker-repo"
-        imageName = "construction-service"
-        tag = "${env.BUILD_NUMBER}"
-        app = docker.build("gcr.io/${projectId}/${imageName}:${tag}")
-        app.push()
-      }
-    } */
     stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
-            withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
-                sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-                projectId = "construction-project-382718"
-                registry = "construction-docker-repo"
-                imageName = "construction-service"
-                app = docker.build("gcr.io/${projectId}/${imageName}")
-                app.push("${env.BUILD_NUMBER}")
-    			app.push("latest")
-            }
+        withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+            sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+            projectId = "construction-project-382718"
+            registry = "construction-docker-repo"
+            imageName = "construction-service"
+            tag = "${env.BUILD_NUMBER}"
+            sh "docker build -t gcr.io/${projectId}/${imageName}:${tag} ."
+            sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
         }
-    /* stage('Deploy to Kubernetes'){
+    }
+   /*  stage('Deploy to Kubernetes'){
         kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig1")
     } */
 
