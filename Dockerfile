@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot
 
-ARG JAR_FILE=target/*.jar
-ADD ${JAR_FILE} app.jar
+WORKDIR /app
+COPY target/*.jar /app/app.jar
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

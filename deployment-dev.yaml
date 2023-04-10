@@ -27,7 +27,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: gcr.io/construction-project-382718/construction-service:44
+          image: gcr.io/construction-project-382718/construction-service:94
           ports:
             - containerPort: 8080
           env:
