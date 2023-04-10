@@ -50,7 +50,7 @@ node {
             imageName = "construction-service"
             tag = "${env.BUILD_NUMBER}"
             app = docker.build("gcr.io/${projectId}/${imageName}:${tag}")
-            app.push(${env.BUILD_NUMBER})
+            app.push("${env.BUILD_NUMBER}")
         }
     }
     /* stage('Deploy to Kubernetes'){
