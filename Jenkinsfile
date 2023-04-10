@@ -50,7 +50,7 @@ node {
         }
     }
     stage('Deploy to Kubernetes'){
-        	withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+        	withCredentials([file(credentialsId: 'construction-project', variable: 'KUBECONFIG')]) {
         	   sh """
                            gcloud auth activate-service-account --key-file=${KUBECONFIG}
                            gcloud container clusters get-credentials construction-cluster --region us-central1 --project construction-project-382718
