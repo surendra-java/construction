@@ -51,7 +51,7 @@ node {
     }
     stage('Deploy to Kubernetes'){
         	try {
-               		kubernetesDeploy(configs: "deployment.yaml", kubeconfigId: "kubeconfig")
+               		kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig")
                }catch (e) {
         			println e
     		   }
