@@ -51,12 +51,10 @@ node {
     }
     stage('Deploy to Kubernetes'){
         withCredentials([googleServiceAccount(credentialsId: 'construction-project', variable:'GOOGLE_APPLICATION_CREDENTIALS')]) {
-            sh """
-                gcloud auth activate-service-account ${GOOGLE_APPLICATION_CREDENTIALS} --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
-                gcloud container clusters get-credentials construction-cluster --region us-central1 --project construction-project-382718
-                kubectl get pods
-                kubectl apply -f deployment-dev.yaml
-            """
+            sh "gcloud auth activate-service-account ${GOOGLE_APPLICATION_CREDENTIALS} --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+            sh "gcloud container clusters get-credentials construction-cluster --region us-central1 --project construction-project-382718"
+            sh "kubectl get pods"
+            sh "kubectl apply -f deployment-dev.yaml"
         }
     }
 
