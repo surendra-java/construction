@@ -1,4 +1,3 @@
-/*
 package org.construction.services;
 
 import static org.junit.Assert.assertEquals;
@@ -17,21 +16,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientProgressStatusImplTest {
 
     @Mock
-    private ClientProgressStatusRepo clientProgressStatusRepoo;
+    private ClientProgressStatusRepo clientProgressStatusRepo;
 
+    @Mock
+    private ModelMapper modelMapper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
-    */
-/*@Test
+    @Test
     public void testGetAllInitialProgressStatus() {
         List<ClientProgressStatus> clientProgressesStatus = new ArrayList<>();
         ClientProgressStatus clientProgressStatus = new ClientProgressStatus();
@@ -54,8 +55,6 @@ public class ClientProgressStatusImplTest {
         assertEquals(clientProgressStatusDtoList.size(), actualResult.size());
         assertEquals(clientProgressStatusDtoList.get(0).getClientProgressStatusId(), actualResult.get(0).getClientProgressStatusId());
         assertEquals(clientProgressStatusDtoList.get(0).getClientProgressStatusName(), actualResult.get(0).getClientProgressStatusName());
-    }*//*
-
+    }
 
 }
-*/
