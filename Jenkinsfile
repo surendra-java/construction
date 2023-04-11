@@ -3,7 +3,6 @@ node {
     def imageName = "construction-service"
     def tag = "latest"
     def mvnHom = tool name: 'maven-3', type: 'maven'
-    def kubeconfigPath = "C:/Users/Lenovo/.kube/config"
     def deploymentYaml = "deployment-dev.yaml"
     //def region = "us-central1"
     //def repositoryName = "construction-service"
@@ -47,7 +46,7 @@ node {
     stage('Deploy to Kubernetes') {
           withCredentials([file(credentialsId: 'kubeconfig1', variable: 'KUBECONFIG', useExisting: true)]) {
                       // Apply deployment YAML to Kubernetes cluster
-                      sh "kubectl apply -f ${deploymentYaml}"
+                      sh "kubectl apply -f ${deploymentYaml} --key-file=${KUBECONFIG}"
                   }
                   }
      /* stage('Deploy to Kubernetes') {
