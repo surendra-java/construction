@@ -39,11 +39,12 @@ node {
             tag = "${env.BUILD_NUMBER}"
             sh "docker build -t gcr.io/${projectId}/${imageName}:${tag} ."
             sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
+            sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:latest"
         }
     }
-   /*  stage('Deploy to Kubernetes'){
+     stage('Deploy to Kubernetes'){
         kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig1")
-    } */
+    }
 
 
 }
