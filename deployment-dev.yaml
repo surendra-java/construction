@@ -29,27 +29,17 @@ spec:
             readOnlyRootFilesystem: false
           image: gcr.io/construction-project-382718/construction-service:109
           ports:
-            - name: liveness-port
-              containerPort: 8080
-              hostPort: 8080
+            - containerPort: 8080
           env:
             - name: PORT
               value: "8080"
             - name: DISABLE_PROFILER
               value: "1"
-
-          startupProbe:
-            httpGet:
-              path: /healthz
-              port: liveness-port
-            failureThreshold: 30
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: liveness-port
-            failureThreshold: 1
-            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 30
           resources:
             requests:
               cpu: 100m
@@ -67,10 +57,12 @@ spec:
   selector:
     app: construction-service
   ports:
-    - name: grpc
+    - protocol: TCP
       port: 5000
-      targetPort: 8080
-    - name: http
+      targetPort: 5000
+      name: public
+    - protocol: TCP
       port: 8080
       targetPort: 8080
+      name: admin
   externalTrafficPolicy: Cluster
