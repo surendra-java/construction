@@ -49,6 +49,7 @@ node {
                       // Apply deployment YAML to Kubernetes cluster
                       sh "kubectl apply -f ${deploymentYaml} --kubeconfig=${kubeconfigPath}"
                   }
+                  }
      /* stage('Deploy to Kubernetes') {
              withEnv(['KUBECONFIG=' + kubeconfigPath]) {
                  sh "kubectl apply -f deployment-dev.yaml"
