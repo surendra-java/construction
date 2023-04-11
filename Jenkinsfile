@@ -45,9 +45,9 @@ node {
         }
     }
     stage('Deploy to Kubernetes') {
-          withCredentials([file(credentialsId: 'kubeconfig1', variable: 'KUBECONFIG', useExisting: true, filenameVariable: 'kubeconfigPath')]) {
+          withCredentials([file(credentialsId: 'kubeconfig1', variable: 'KUBECONFIG', useExisting: true)]) {
                       // Apply deployment YAML to Kubernetes cluster
-                      sh "kubectl apply -f ${deploymentYaml} --kubeconfig=${kubeconfigPath}"
+                      sh "kubectl apply -f ${deploymentYaml}"
                   }
                   }
      /* stage('Deploy to Kubernetes') {
