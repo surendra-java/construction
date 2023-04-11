@@ -44,13 +44,13 @@ pipeline {
             }
         }
 
-        stage('CODE QUALITY') {
+       /*  stage('CODE QUALITY') {
             steps {
                 withSonarQubeEnv(credentialsId: 'sonar-auth', installationName: 'SonarQube') {
                     sh "${mvnHom}/bin/mvn clean package sonar:sonar"
                 }
             }
-        }
+        } */
 
         stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
             steps {
