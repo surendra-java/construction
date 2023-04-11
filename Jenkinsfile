@@ -50,15 +50,14 @@ node {
     stage('Deploy to K8s') {
           sh 'ls -ltr'
           sh 'pwd'
-          def keb = new KubernetesEngineBuilder(
+          $class: ['KubernetesEngineBuilder'(
              projectId: "${projectId}",
              clusterName: "${clusterName}",
              location: "${location}",
              manifestPattern: 'deployment-dev.yaml',
              credentialsId: "${credentialsId}",
-             verifyDeployments: true
-          )
-          keb.perform()
+             verifyDeployments: true)]
+          //keb.perform()
        }
    /* container('google-cloud-sdk') {
          withCredentials([googleServiceAccount(credentialsId: '${credentialsId}', jsonKeyVariable: 'GCLOUD_KEY_FILE')]) {
