@@ -3,7 +3,7 @@ node {
     def imageName = "construction-service"
     def tag = "latest"
     def mvnHom = tool name: 'maven-3', type: 'maven'
-    def kubeconfigPath = "C:/Users/Lenovo/.kube/config"
+    def kubeconfigPath = "/Users/Lenovo/.kube/config"
     //def region = "us-central1"
     //def repositoryName = "construction-service"
     stage('CHECKOUT') {
