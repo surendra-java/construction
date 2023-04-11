@@ -47,7 +47,6 @@ node {
     stage('Deploy to Kubernetes') {
           withCredentials([file(credentialsId: 'kubeconfig1', variable: 'KUBECONFIG', useExisting: true, filenameVariable: 'kubeconfigPath')]) {
                       // Apply deployment YAML to Kubernetes cluster
-                      sh "gcloud components install gke-gcloud-auth-plugin"
                       sh "kubectl apply -f ${deploymentYaml} --kubeconfig='${kubeconfigPath}'"
                   }
                   }
