@@ -10,6 +10,7 @@ import org.construction.repo.ClientMasterRepo;
 import org.construction.repo.ClientProgressMasterRepo;
 import org.construction.repo.ClientProgressRepo;
 import org.construction.repo.ClientProgressStatusRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,16 +28,19 @@ import java.util.stream.Collectors;
 public class ClientMasterServiceImpl implements IClientMasterService {
 
     private final ClientMasterRepo clientMasterRepo;
+    private final ModelMapper modelMapper;
     private final ClientProgressRepo clientProgressRepo;
     private final ClientProgressMasterRepo clientProgressMasterRepo;
     private final ClientProgressStatusRepo clientProgressStatusRepo;
 
     @Autowired
     public ClientMasterServiceImpl(ClientMasterRepo clientMasterRepo,
+                                   ModelMapper modelMapper,
                                    ClientProgressRepo clientProgressRepo,
                                    ClientProgressMasterRepo clientProgressMasterRepo,
                                    ClientProgressStatusRepo clientProgressStatusRepo) {
         this.clientMasterRepo = clientMasterRepo;
+        this.modelMapper = modelMapper;
         this.clientProgressRepo = clientProgressRepo;
         this.clientProgressMasterRepo = clientProgressMasterRepo;
         this.clientProgressStatusRepo = clientProgressStatusRepo;
@@ -87,12 +91,11 @@ public class ClientMasterServiceImpl implements IClientMasterService {
     @Transactional
     @Override
     public List<ClientMasterDto> getClientsInfo() {
-      /*  List<ClientMaster> clientsMaster = clientMasterRepo.findAll();
+        List<ClientMaster> clientsMaster = clientMasterRepo.findAll();
         return clientsMaster
                 .stream()
                 .map(clientMaster -> modelMapper.map(clientMaster, ClientMasterDto.class))
-                .collect(Collectors.toList());*/
-        return null;
+                .collect(Collectors.toList());
     }
 
     @Transactional
