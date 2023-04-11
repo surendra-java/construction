@@ -3,6 +3,7 @@ node {
     def imageName = "construction-service"
     def tag = "latest"
     def mvnHom = tool name: 'maven-3', type: 'maven'
+    def kubeconfigPath = "C:/Users/Lenovo/.kube/config"
     //def region = "us-central1"
     //def repositoryName = "construction-service"
     stage('CHECKOUT') {
@@ -42,9 +43,11 @@ node {
             sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:latest"
         }
     }
-     stage('Deploy to Kubernetes'){
-        kubernetesDeploy(configs: "deployment-dev.yaml", kubeconfigId: "kubeconfig")
-    }
+     stage('Deploy to Kubernetes') {
+             withEnv(['KUBECONFIG=' + kubeconfigPath]) {
+                 sh "kubectl apply -f deployment-dev.yaml"
+             }
+         }
 
 
 }
