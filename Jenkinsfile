@@ -46,7 +46,7 @@ pipeline {
 
         stage('CODE QUALITY') {
             steps {
-                withSonarQubeEnv(credentialsId: 'sonar-auth', installationName: 'SonarQube') {
+                withSonarQubeEnv(credentialsId: 'sonar-auth') {
                     sh "${mvnHom}/bin/mvn clean package sonar:sonar"
                 }
             }
@@ -56,13 +56,9 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
                     sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-                    projectId = "construction-project-382718"
-                    registry = "construction-docker-repo"
-                    imageName = "construction-service"
-                    tag = "${env.BUILD_NUMBER}"
-                    sh "docker build -t gcr.io/${projectId}/${imageName}:${tag} ."
-                    sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:${tag}"
-                    sh "gcloud docker -- push gcr.io/${projectId}/${imageName}:latest"
+                    sh "docker build -t gcr.io/${projectID}/${imageName}:${tag} ."
+                    sh "gcloud docker -- push gcr.io/${projectID}/${imageName}:${tag}"
+                    sh "gcloud docker -- push gcr.io/${projectID}/${imageName}:latest"
                 }
             }
         }
