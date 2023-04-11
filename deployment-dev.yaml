@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: construction-service
+  namespace: deployment
 spec:
   selector:
     matchLabels:
@@ -47,11 +48,13 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: construction-service
+  namespace: deployment
 spec:
   type: LoadBalancer
   selector:
