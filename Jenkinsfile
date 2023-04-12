@@ -77,9 +77,9 @@ pipeline {
                 withCredentials([file(credentialsId: 'jenkins-sa-key', variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                     sh("gcloud version")
-                    sh "gcloud container clusters create-auto construction-autopilot-cluster \
-                           --project=construction-project-382718 --us-central1 --service-account jenkins-sa@construction-project-382718.iam.gserviceaccount.com"
-
+                    sh "gcloud container clusters create-auto onlineboutique \
+                            --project=construction-project-382718 --region=us-central1 \
+                        	--service-account jenkins-sa@construction-project-382718.iam.gserviceaccount.com"
                     //sh("gcloud container clusters get-credentials prod --zone northamerica-northeast1-a --project ${project}")
                 }
             }
