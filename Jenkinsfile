@@ -74,13 +74,12 @@ pipeline {
         stage('Create autopilot cluster') {
             steps {
                 // Configure GCP credentials
-                withCredentials([googleServiceAccountKey(credentialsId: 'jenkins-sa-key', jsonKeyVariable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                    // Authenticate with GCP
-                    sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+                withCredentials([file(credentialsId: 'jenkins-sa-key', variable: 'GC_KEY')]) {
+                    sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                     sh "gcloud version"
-                    // Create the autopilot cluster
-                    // sh "gcloud container clusters create ${clusterName} --release-channel regular --num-nodes 1 --enable-autopilot --region us-central1-a --machine-type e2-medium --disk-size 100 --image-type cos_containerd --service-account jenkins-sa@${projectID}.iam.gserviceaccount.com"
-                }
+                    //sh("gcloud container clusters get-credentials prod --zone northamerica-northeast1-a --project ${project}")
+                  }
+
             }
         }
     }
