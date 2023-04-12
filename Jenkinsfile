@@ -1,3 +1,12 @@
+def clusterName = "construction-autopilot-cluster"
+
+def clusterExists() {
+    def cmd = "gcloud container clusters list --format 'value(name)' --filter 'name=${clusterName}'"
+    return sh(
+        script: cmd,
+        returnStdout: true
+    ).trim() == clusterName
+}
 pipeline {
     agent any
     environment {
@@ -63,12 +72,27 @@ pipeline {
             }
         }
 
-        stage('Deploy to K8s') {
+        /* stage('Deploy to K8s') {
             steps {
                 sh 'ls -ltr'
                 sh 'pwd'
                 step([$class: 'KubernetesEngineBuilder', projectId: env.projectID, clusterName: env.clusterName, location: env.location, manifestPattern: 'deployment-dev.yaml', credentialsId: env.credentialsId, verifyDeployments: true])
             }
-        }
+        } */
+        stage('Create autopilot cluster') {
+                    when {
+                        expression { !clusterExists() }
+                    }
+                    steps {
+                        // Configure GCP credentials
+                        withCredentials([googleServiceAccountKey(credentialsId: 'jenkins-sa-key', jsonKeyVariable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                            // Authenticate with GCP
+                            sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+
+                            // Create the autopilot cluster
+                            sh "gcloud container clusters create ${clusterName} --release-channel regular --num-nodes 1 --enable-autopilot --region us-central1-a --machine-type e2-medium --disk-size 100 --image-type cos_containerd --service-account jenkins-sa@${projectID}.iam.gserviceaccount.com"
+                        }
+                    }
+                }
     }
 }
