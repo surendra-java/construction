@@ -53,7 +53,7 @@ pipeline {
 
         stage('BUILD AND PUSH IMAGE TO ARTIFACT CONTAINER') {
             steps {
-                withCredentials([file(credentialsId: 'gcr-cred', variable: 'GC_KEY')]) {
+                withCredentials([file(credentialsId: 'construction-project-382718', variable: 'GC_KEY')]) {
                     sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
                     sh "docker build -t gcr.io/${projectID}/${imageName}:${tag} ."
                     sh "gcloud docker -- push gcr.io/${projectID}/${imageName}:${tag}"
