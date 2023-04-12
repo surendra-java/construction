@@ -11,6 +11,7 @@ pipeline {
         clusterName = "onlineboutique"
         location = "us-central1"
         credentialsId = "k8s-service-cred"
+
     }
 
     stages {
@@ -72,13 +73,15 @@ pipeline {
             }
         } */
         stage('Create autopilot cluster') {
-           steps {
-            file(credentialsId: 'jenkins-sa-key', variable: 'GC_KEY') {
-                    // Activate GCP service account credentials
-                    sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
-                    //sh("gcloud container clusters create autopilot-cluster --project=${PROJECT_ID} --region=${REGION} --enable-autopilot --machine-type=e2-medium --num-nodes=1")
-             }
-           }
+           environment {
+                   GC_KEY = credentials('jenkins-sa-key')
+               }
+               steps {
+                   // Configure GCP credentials
+                   sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
+                   sh "gcloud version"
+                   //sh("gcloud container clusters get-credentials prod --zone northamerica-northeast1-a --project ${project}")
+               }
         }
     }
 }
