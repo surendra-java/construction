@@ -1,12 +1,4 @@
-def clusterName = "construction-autopilot-cluster"
 
-def clusterExists() {
-    def cmd = "gcloud container clusters list --format 'value(name)' --filter 'name=${clusterName}'"
-    return sh(
-        script: cmd,
-        returnStdout: true
-    ).trim() == clusterName
-}
 pipeline {
     agent any
     environment {
@@ -80,19 +72,16 @@ pipeline {
             }
         } */
         stage('Create autopilot cluster') {
-                    when {
-                        expression { !clusterExists() }
-                    }
-                    steps {
-                        // Configure GCP credentials
-                        withCredentials([googleServiceAccountKey(credentialsId: 'jenkins-sa-key', jsonKeyVariable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                            // Authenticate with GCP
-                            sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
-
-                            // Create the autopilot cluster
-                            sh "gcloud container clusters create ${clusterName} --release-channel regular --num-nodes 1 --enable-autopilot --region us-central1-a --machine-type e2-medium --disk-size 100 --image-type cos_containerd --service-account jenkins-sa@${projectID}.iam.gserviceaccount.com"
-                        }
-                    }
+            steps {
+                // Configure GCP credentials
+                withCredentials([googleServiceAccountKey(credentialsId: 'jenkins-sa-key', jsonKeyVariable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    // Authenticate with GCP
+                    sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+                    sh "gcloud version"
+                    // Create the autopilot cluster
+                    // sh "gcloud container clusters create ${clusterName} --release-channel regular --num-nodes 1 --enable-autopilot --region us-central1-a --machine-type e2-medium --disk-size 100 --image-type cos_containerd --service-account jenkins-sa@${projectID}.iam.gserviceaccount.com"
                 }
+            }
+        }
     }
 }
