@@ -72,11 +72,13 @@ pipeline {
             }
         } */
         stage('Create autopilot cluster') {
+           steps {
             file(credentialsId: 'jenkins-sa-key', variable: 'GC_KEY') {
                     // Activate GCP service account credentials
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
                     //sh("gcloud container clusters create autopilot-cluster --project=${PROJECT_ID} --region=${REGION} --enable-autopilot --machine-type=e2-medium --num-nodes=1")
              }
+           }
         }
     }
 }
