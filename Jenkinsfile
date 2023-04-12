@@ -73,15 +73,13 @@ pipeline {
             }
         } */
         stage('Create autopilot cluster') {
-           environment {
-                   GC_KEY = credentials('jenkins-sa-key')
-               }
-               steps {
-                   // Configure GCP credentials
-                   sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
-                   sh "gcloud version"
-                   //sh("gcloud container clusters get-credentials prod --zone northamerica-northeast1-a --project ${project}")
-               }
+            steps {
+                withGoogleServiceAccount(credentialsId: 'jenkins-sa-key', scopes: ['https://www.googleapis.com/auth/cloud-platform']) {
+                    sh("gcloud version")
+                    sh("gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}")
+                    //sh("gcloud container clusters get-credentials prod --zone northamerica-northeast1-a --project ${project}")
+                }
+            }
         }
     }
 }
