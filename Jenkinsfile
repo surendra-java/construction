@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         projectID = "construction-project-382718"
         imageName = "construction-service"
