@@ -65,14 +65,7 @@ pipeline {
             }
         }
 
-        /* stage('Deploy to K8s') {
-            steps {
-                sh 'ls -ltr'
-                sh 'pwd'
-                step([$class: 'KubernetesEngineBuilder', projectId: env.projectID, clusterName: env.clusterName, location: env.location, manifestPattern: 'deployment-dev.yaml', credentialsId: env.credentialsId, verifyDeployments: true])
-            }
-        } */
-        stage('Create autopilot cluster') {
+        stage('DEPLOY ON CLUSTER') {
             steps {
                 withCredentials([file(credentialsId: 'jenkins-sa-key', variable: 'GC_KEY')]) {
                     sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
