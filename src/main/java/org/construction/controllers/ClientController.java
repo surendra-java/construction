@@ -20,8 +20,6 @@ public class ClientController {
         this.clientMasterService = iClientMasterService;
     }
 
-//    @Autowired
-//    ClientMasterRepo clientMasterRepo;
     @PostMapping(value = "/create-client", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> createClient(
             @RequestParam("clientName") String clientName,
@@ -52,7 +50,6 @@ public class ClientController {
     @GetMapping(value = "/client-info")
     public ResponseEntity<ClientMasterDto> getClient(
             @RequestParam("clientId") Long clientId) throws IOException {
-        // process the data here
         ClientMasterDto clientInfo = clientMasterService.getClientInfo(clientId);
         return ResponseEntity.ok().body(clientInfo);
     }

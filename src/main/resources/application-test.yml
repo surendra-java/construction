@@ -2,10 +2,8 @@ spring:
   application:
     name: construction-service
   datasource:
-    #url: jdbc:postgresql://34.173.138.111:5432/CONSTRUCTION
-    url: jdbc:postgresql://localhost:5432/CONSTRUCTION
-    #username: construction-dev
-    username: postgres
+    url: jdbc:postgresql://34.173.138.111:5432/CONSTRUCTION
+    username: construction-dev
     password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
