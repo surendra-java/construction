@@ -1,8 +1,6 @@
 package org.construction.services;
 
-import org.construction.dto.ClientMasterDto;
 import org.construction.dto.SiteMasterDto;
-import org.construction.model.ClientMaster;
 import org.construction.model.SiteMaster;
 import org.construction.repo.SiteMasterRepo;
 import org.modelmapper.ModelMapper;

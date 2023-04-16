@@ -1,9 +1,7 @@
 package org.construction.services;
 
 import org.construction.dto.EngineerMasterDto;
-import org.construction.dto.SiteMasterDto;
 import org.construction.model.EngineerMaster;
-import org.construction.model.SiteMaster;
 import org.construction.repo.EngineerMasterRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
