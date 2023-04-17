@@ -25,7 +25,7 @@ public class FlywayConfig {
                 .dataSource(dataSource)
                 .locations(locations)
                 .schemas("site_construction")
-                .baselineOnMigrate(true) // Optional, sets baselineOnMigrate to true
+                .baselineOnMigrate(true)
                 .load();
         flyway.baseline();
         flyway.migrate();
