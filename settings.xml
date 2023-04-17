@@ -1,3 +1,4 @@
+<!--
 <settings>
     <servers>
         <server>
@@ -37,4 +38,15 @@
     <activeProfiles>
         <activeProfile>local-nexus</activeProfile>
     </activeProfiles>
+</settings>
+-->
+<settings>
+    <mirrors>
+        <mirror>
+            <id>central</id>
+            <name>central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
 </settings>
