@@ -5,12 +5,18 @@
 CREATE TABLE IF NOT EXISTS site_construction.site_allocation
 (
     site_allocation_id bigint NOT NULL,
-    client_id bigint,
+    client_id bigint NOT NULL,
+    site_master_id bigint NOT NULL,
     CONSTRAINT site_allocation_id_pk PRIMARY KEY (site_allocation_id),
     CONSTRAINT client_id_fk FOREIGN KEY (client_id)
         REFERENCES site_construction.client_master (client_id) MATCH SIMPLE
         ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT site_master_id_fk FOREIGN KEY (site_master_id)
+        REFERENCES site_construction.site_master (site_master_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
         ON DELETE NO ACTION
+        NOT VALID
 )
 
 TABLESPACE pg_default;
