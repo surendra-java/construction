@@ -16,6 +16,8 @@ public interface IClientMasterService {
 
     List<ClientMasterDto> getClientsInfo();
 
+    List<ClientMasterDto> getUnallocatedClientsInfo();
+
     void deleteClient(Long clientId);
 
     void updateClient(Long clientId,

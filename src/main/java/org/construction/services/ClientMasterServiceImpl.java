@@ -2,14 +2,8 @@ package org.construction.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.construction.dto.ClientMasterDto;
-import org.construction.model.ClientMaster;
-import org.construction.model.ClientProgress;
-import org.construction.model.ClientProgressMaster;
-import org.construction.model.ClientProgressStatus;
-import org.construction.repo.ClientMasterRepo;
-import org.construction.repo.ClientProgressMasterRepo;
-import org.construction.repo.ClientProgressRepo;
-import org.construction.repo.ClientProgressStatusRepo;
+import org.construction.model.*;
+import org.construction.repo.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,17 +27,21 @@ public class ClientMasterServiceImpl implements IClientMasterService {
     private final ClientProgressMasterRepo clientProgressMasterRepo;
     private final ClientProgressStatusRepo clientProgressStatusRepo;
 
+    private final ClientAllocationRepo clientAllocationRepo;
+
     @Autowired
     public ClientMasterServiceImpl(ClientMasterRepo clientMasterRepo,
                                    ModelMapper modelMapper,
                                    ClientProgressRepo clientProgressRepo,
                                    ClientProgressMasterRepo clientProgressMasterRepo,
-                                   ClientProgressStatusRepo clientProgressStatusRepo) {
+                                   ClientProgressStatusRepo clientProgressStatusRepo,
+                                   ClientAllocationRepo clientAllocationRepo) {
         this.clientMasterRepo = clientMasterRepo;
         this.modelMapper = modelMapper;
         this.clientProgressRepo = clientProgressRepo;
         this.clientProgressMasterRepo = clientProgressMasterRepo;
         this.clientProgressStatusRepo = clientProgressStatusRepo;
+        this.clientAllocationRepo = clientAllocationRepo;
     }
 
     @Transactional
@@ -92,6 +90,17 @@ public class ClientMasterServiceImpl implements IClientMasterService {
     @Override
     public List<ClientMasterDto> getClientsInfo() {
         List<ClientMaster> clientsMaster = clientMasterRepo.findAll();
+
+        return clientsMaster
+                .stream()
+                .map(clientMaster -> modelMapper.map(clientMaster, ClientMasterDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public List<ClientMasterDto> getUnallocatedClientsInfo() {
+        List<ClientMaster> clientsMaster = clientMasterRepo.findAllByNotInAllocation();
         return clientsMaster
                 .stream()
                 .map(clientMaster -> modelMapper.map(clientMaster, ClientMasterDto.class))
