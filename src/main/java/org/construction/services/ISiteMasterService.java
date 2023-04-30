@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ISiteMasterService {
-    void createSite(String siteName, String siteAddress, String siteWard, String siteCity, String sitePin,   MultipartFile sitePhoto) throws IOException;
+    void createSite(Long client, Long engineer, Long supervisor, String siteName, String siteAddress, String siteWard, String siteCity, String sitePin,   MultipartFile sitePhoto) throws IOException;
 
     List<SiteMasterDto> getSitesInfo();
 

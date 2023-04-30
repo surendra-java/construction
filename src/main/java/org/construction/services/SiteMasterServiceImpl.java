@@ -1,11 +1,12 @@
 package org.construction.services;
 
 import org.construction.dto.SiteMasterDto;
-import org.construction.model.SiteMaster;
-import org.construction.repo.SiteMasterRepo;
+import org.construction.model.*;
+import org.construction.repo.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,16 +18,41 @@ import java.util.stream.Collectors;
 public class SiteMasterServiceImpl implements ISiteMasterService{
 
     private final SiteMasterRepo siteMasterRepo;
+    //private final SiteAllocationRepo siteAllocationRepo;
 
+    private final ClientAllocationRepo clientAllocationRepo;
+
+    private final EngineerAllocationRepo engineerAllocationRepo;
+
+    private final SupervisorAllocationRepo supervisorAllocationRepo;
+
+    private final ClientMasterRepo clientMasterRepo;
+
+    private final EngineerMasterRepo engineerMasterRepo;
+
+    private final SupervisorMasterRepo supervisorMasterRepo;
     private final ModelMapper modelMapper;
     @Autowired
-    public SiteMasterServiceImpl(SiteMasterRepo siteMasterRepo,  ModelMapper modelMapper) {
+    public SiteMasterServiceImpl(SiteMasterRepo siteMasterRepo,
+                                 ClientAllocationRepo clientAllocationRepo,
+                                 EngineerAllocationRepo engineerAllocationRepo,
+                                 SupervisorAllocationRepo supervisorAllocationRepo,
+                                 ClientMasterRepo clientMasterRepo,
+                                 EngineerMasterRepo engineerMasterRepo,
+                                 SupervisorMasterRepo supervisorMasterRepo,
+                                 ModelMapper modelMapper) {
         this.siteMasterRepo = siteMasterRepo;
+        this.clientAllocationRepo = clientAllocationRepo;
+        this.engineerAllocationRepo = engineerAllocationRepo;
+        this.supervisorAllocationRepo = supervisorAllocationRepo;
+        this.clientMasterRepo = clientMasterRepo;
+        this.engineerMasterRepo = engineerMasterRepo;
+        this.supervisorMasterRepo = supervisorMasterRepo;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public void createSite(String siteName, String siteAddress, String siteWard, String siteCity, String sitePin, MultipartFile sitePhoto) throws IOException {
+    public void createSite(Long client, Long engineer, Long supervisor, String siteName, String siteAddress, String siteWard, String siteCity, String sitePin, MultipartFile sitePhoto) throws IOException {
         SiteMaster siteMaster = new SiteMaster();
         siteMaster.setSiteName(siteName);
         siteMaster.setSiteAddress(siteAddress);
@@ -34,7 +60,28 @@ public class SiteMasterServiceImpl implements ISiteMasterService{
         siteMaster.setSiteCity(siteCity);
         siteMaster.setSitePin(sitePin);
         siteMaster.setSitePhoto(sitePhoto.getBytes());
-        siteMasterRepo.save(siteMaster);
+        SiteMaster savedSiteMaster = siteMasterRepo.save(siteMaster);
+
+
+        ClientAllocation clientAllocation = new ClientAllocation();
+        clientAllocation.setSiteMaster(savedSiteMaster);
+        ClientMaster clientMaster = clientMasterRepo.findById(client).get();
+        clientAllocation.setClientMaster(clientMaster);
+        clientAllocationRepo.save(clientAllocation);
+
+        EngineerAllocation engineerAllocation = new EngineerAllocation();
+        engineerAllocation.setSiteMaster(savedSiteMaster);
+        EngineerMaster engineerMaster = engineerMasterRepo.findById(engineer).get();
+        engineerAllocation.setEngineerMaster(engineerMaster);
+        engineerAllocationRepo.save(engineerAllocation);
+
+        SupervisorAllocation supervisorAllocation = new SupervisorAllocation();
+        supervisorAllocation.setSiteMaster(savedSiteMaster);
+        SupervisorMaster supervisorMaster = supervisorMasterRepo.findById(supervisor).get();
+        supervisorAllocation.setSupervisorMaster(supervisorMaster);
+        supervisorAllocationRepo.save(supervisorAllocation);
+
+
     }
 
     @Override
@@ -50,9 +97,21 @@ public class SiteMasterServiceImpl implements ISiteMasterService{
         return sites;
     }
 
+    @Transactional
     @Override
     public void deleteSite(Long siteMasterId) {
+        SiteMaster siteMaster = siteMasterRepo.findById(siteMasterId).orElse(null);
+        ClientAllocation clientAllocation = clientAllocationRepo.findBySiteMaster(siteMaster);
+        EngineerAllocation engineerAllocation=engineerAllocationRepo.findBySiteMaster(siteMaster);
+        SupervisorAllocation supervisorAllocation = supervisorAllocationRepo.findBySiteMaster(siteMaster);
+        if(clientAllocation!=null)
+            clientAllocationRepo.deleteById(clientAllocation.getClientAllocationId());
+        if(engineerAllocation!=null)
+            engineerAllocationRepo.deleteById(engineerAllocation.getEngineerAllocationId());
+        if(supervisorAllocation!=null)
+            supervisorAllocationRepo.deleteById(supervisorAllocation.getSupervisorAllocationId());
         siteMasterRepo.deleteById(siteMasterId);
+
     }
 
     @Override

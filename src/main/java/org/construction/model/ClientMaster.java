@@ -40,6 +40,9 @@ public class ClientMaster implements Serializable {
 	@OneToMany(mappedBy="clientMaster")
 	private List<ClientProgress> clientProgresses;
 
+	@OneToMany(mappedBy="clientMaster")
+	private List<SiteAllocation> siteAllocations;
+
 	public ClientMaster() {
 	}
 

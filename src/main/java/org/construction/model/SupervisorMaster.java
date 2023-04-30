@@ -1,6 +1,7 @@
 package org.construction.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="supervisor_master", schema = "site_construction")
@@ -18,8 +19,11 @@ public class SupervisorMaster {
     private String supervisorMobNbr;
 
     @Lob
-    @Column(name = "Supervisor_photo")
+    @Column(name = "supervisor_photo")
     private byte[] supervisorPhoto;
+
+    @OneToMany(mappedBy="supervisorMaster")
+    private List<SupervisorAllocation> supervisorAllocations;
 
     public long getSupervisorMasterId() {
         return supervisorMasterId;
@@ -59,5 +63,13 @@ public class SupervisorMaster {
 
     public void setSupervisorPhoto(byte[] supervisorPhoto) {
         this.supervisorPhoto = supervisorPhoto;
+    }
+
+    public List<SupervisorAllocation> getSupervisorAllocations() {
+        return supervisorAllocations;
+    }
+
+    public void setSupervisorAllocations(List<SupervisorAllocation> supervisorAllocations) {
+        this.supervisorAllocations = supervisorAllocations;
     }
 }

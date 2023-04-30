@@ -1,6 +1,7 @@
 package org.construction.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="site_master", schema = "site_construction")
@@ -27,6 +28,17 @@ public class SiteMaster {
     @Lob
     @Column(name = "site_photo")
     private byte[] sitePhoto;
+
+    @OneToMany(mappedBy="siteMaster")
+    private List<SiteAllocation> siteAllocations;
+
+    public List<SiteAllocation> getSiteAllocations() {
+        return siteAllocations;
+    }
+
+    public void setSiteAllocations(List<SiteAllocation> siteAllocations) {
+        this.siteAllocations = siteAllocations;
+    }
 
     public long getSiteMasterId() {
         return siteMasterId;

@@ -20,6 +20,9 @@ public class SiteController {
     }
     @PostMapping(value = "/create-site", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> createSite(
+            @RequestParam("client") Long client,
+            @RequestParam("engineer") Long engineer,
+            @RequestParam("supervisor") Long supervisor,
             @RequestParam("siteName") String siteName,
             @RequestParam("siteAddress") String siteAddress,
             @RequestParam("siteWard") String siteWard,
@@ -27,7 +30,7 @@ public class SiteController {
             @RequestParam("sitePin") String sitePin,
             @RequestParam("sitePhoto") MultipartFile sitePhoto) throws IOException {
         // process the data here
-        siteMasterService.createSite(siteName, siteAddress, siteWard, siteCity, sitePin, sitePhoto);
+        siteMasterService.createSite(client, engineer, supervisor, siteName, siteAddress, siteWard, siteCity, sitePin, sitePhoto);
         return ResponseEntity.ok().body("{\"message\": \"CREATED\"}");
     }
 
@@ -52,7 +55,7 @@ public class SiteController {
         return ResponseEntity.ok().body("{\"message\": \"DELETED\"}");
     }
     @GetMapping(value = "/site-info")
-    public ResponseEntity<SiteMasterDto> getClient(
+    public ResponseEntity<SiteMasterDto> getSite(
             @RequestParam("siteMasterId") Long siteMasterId) throws IOException {
         SiteMasterDto site = siteMasterService.getSiteInfo(siteMasterId);
         return ResponseEntity.ok().body(site);
@@ -63,4 +66,5 @@ public class SiteController {
         List<SiteMasterDto> sitesInfo = siteMasterService.getSitesInfo();
         return ResponseEntity.ok().body(sitesInfo);
     }
+
 }

@@ -1,6 +1,7 @@
 package org.construction.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="engineer_master", schema = "site_construction")
@@ -19,6 +20,9 @@ public class EngineerMaster {
     @Lob
     @Column(name = "engineer_photo")
     private byte[] engineerPhoto;
+
+    @OneToMany(mappedBy="engineerMaster")
+    private List<EngineerAllocation> engineerAllocations;
     public long getEngineerMasterId() {
         return engineerMasterId;
     }
@@ -59,4 +63,11 @@ public class EngineerMaster {
         this.engineerPhoto = engineerPhoto;
     }
 
+    public List<EngineerAllocation> getEngineerAllocations() {
+        return engineerAllocations;
+    }
+
+    public void setEngineerAllocations(List<EngineerAllocation> engineerAllocations) {
+        this.engineerAllocations = engineerAllocations;
+    }
 }
