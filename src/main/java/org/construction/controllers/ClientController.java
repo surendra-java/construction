@@ -63,6 +63,13 @@ public class ClientController {
         return ResponseEntity.ok().body(clientsInfo);
     }
 
+    @GetMapping(value = "/unallocated-client-all-info")
+    public ResponseEntity<List<ClientMasterDto>> getUnallocatedClients() {
+        // process the data here
+        List<ClientMasterDto> clientsInfo = clientMasterService.getUnallocatedClientsInfo();
+        return ResponseEntity.ok().body(clientsInfo);
+    }
+
     @DeleteMapping(value = "/client-delete")
     public ResponseEntity<String> deleteClient( @RequestParam("clientId") Long clientId) throws IOException {
         // process the data here
